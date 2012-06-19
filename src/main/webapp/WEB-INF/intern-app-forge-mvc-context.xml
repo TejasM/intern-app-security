@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+	<context:component-scan base-package="org.jboss.examples.mvc" />
+	<bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"
+		id="viewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.tiles2.TilesView" />
+	</bean>
+	<bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"
+		id="tilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/**/layouts.xml</value>
+				<value>/WEB-INF/**/views.xml</value>
+			</list>
+		</property>
+	</bean>
+	<context:component-scan base-package="org.jboss.examples.conversion.**" />
+
+	<mvc:annotation-driven conversion-service="conversionService" />
+	<mvc:default-servlet-handler />
+	<mvc:resources location="/" mapping="/static/**" />
+
+	<bean id="conversionService"
+		class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="org.jboss.examples.converters.InternConverter" />
+			</list>
+		</property>
+	</bean>
+	
+	
+	<http auto-config="true">
+		<intercept-url pattern="/**" access="permitAll"/>
+		<form-login />
+		<logout />
+	</http>
+	
+	
+	<authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="admin" password="admin" authorities="admin, user" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+</beans>

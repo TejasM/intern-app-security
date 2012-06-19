@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+  <definition extends="standard" name="/index">
+    <put-attribute name="title" value="Welcome to Forge"/>
+    <put-attribute name="body" value="/WEB-INF/views/index.jsp"/>
+  </definition>
+  <definition extends="standard" name="createIntern">
+    <put-attribute name="title" value="Create New Intern"/>
+    <put-attribute name="body" value="/WEB-INF/views/Intern/createIntern.jsp"/>
+  </definition>
+  <definition extends="standard" name="updateIntern">
+    <put-attribute name="title" value="Update Intern"/>
+    <put-attribute name="body" value="/WEB-INF/views/Intern/updateIntern.jsp"/>
+  </definition>
+  <definition extends="standard" name="interns">
+    <put-attribute name="title" value="View All Interns"/>
+    <put-attribute name="body" value="/WEB-INF/views/Intern/interns.jsp"/>
+  </definition>
+  <definition extends="standard" name="viewIntern">
+    <put-attribute name="title" value="View Intern"/>
+    <put-attribute name="body" value="/WEB-INF/views/Intern/viewIntern.jsp"/>
+  </definition>
+</tiles-definitions>

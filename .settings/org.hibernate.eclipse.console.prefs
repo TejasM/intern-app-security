@@ -1,0 +1,3 @@
+default.configuration=intern-app-forge
+eclipse.preferences.version=1
+hibernate3.enabled=true
