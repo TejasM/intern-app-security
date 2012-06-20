@@ -5,11 +5,17 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Version;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Project implements java.io.Serializable
@@ -110,9 +116,10 @@ public class Project implements java.io.Serializable
       return result;
    }
 
-   private @ManyToMany(mappedBy = "projects")
-   Set<Intern> interns = new HashSet<Intern>();
-
+   @ManyToMany(mappedBy = "projects", fetch=FetchType.EAGER)
+   @LazyCollection(LazyCollectionOption.FALSE)
+   private Set<Intern> interns = new HashSet<Intern>();
+   
    public Set<Intern> getInterns()
    {
       return this.interns;

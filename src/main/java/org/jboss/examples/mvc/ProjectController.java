@@ -1,14 +1,12 @@
 package org.jboss.examples.mvc;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.security.Principal;
 import java.util.List;
 
+import org.jboss.examples.model.Intern;
 import org.jboss.examples.model.Project;
-import org.jboss.examples.repo.ProjectDao;
-
 import org.jboss.examples.repo.InternDao;
-
+import org.jboss.examples.repo.ProjectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,22 +39,28 @@ public class ProjectController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String viewProject(@PathVariable("id") Long id, Model model,
-			@RequestParam(required = false) String edit) {
-		// Project project = projectDao.getById(id);
-		List<Project> projects = projectDao.getAll();
-		for (Project project2 : projects) {
-			if (project2.getId().equals(id)) {
-				model.addAttribute("project", project2);
-			}
-		}
+			@RequestParam(required = false) String edit, Principal principal) {
+
+		model.addAttribute("project", projectDao.getById(id));
 
 		if (edit == null || !edit.equals("true")) {
 			return "viewProject";
 		}
 
 		else {
-
-			model.addAttribute("interns", internDao.getAll());
+			List<Intern> interns = internDao.getAll();
+			for (Intern intern : interns) {
+				if (!(principal.getName().equals("admin"))
+						&& !(intern.getFullName().equals(principal.getName()))) {
+					if (interns.indexOf(intern) == interns.size() - 1) {
+						interns.remove(intern);
+						break;
+					} else {
+						interns.remove(intern);
+					}
+				}
+			}
+			model.addAttribute("interns", interns);
 
 			return "updateProject";
 		}
@@ -75,9 +79,20 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public String createProject(Model model) {
-
-		model.addAttribute("interns", internDao.getAll());
+	public String createProject(Model model, Principal principal) {
+		List<Intern> interns = internDao.getAll();
+		for (Intern intern : interns) {
+			if (!(principal.getName().equals("admin"))
+					&& !(intern.getFullName().equals(principal.getName()))) {
+				if (interns.indexOf(intern) == interns.size() - 1) {
+					interns.remove(intern);
+					break;
+				} else {
+					interns.remove(intern);
+				}
+			}
+		}
+		model.addAttribute("interns", interns);
 
 		model.addAttribute("project", new Project());
 

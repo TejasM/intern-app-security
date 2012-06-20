@@ -38,8 +38,10 @@
 
 
 	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/interns/create*"
+			access="hasRole('admin')" />
 		<security:intercept-url pattern="/**"
-			access="hasAnyRole('admin') or isAuthenticated()"/>
+			access="isAuthenticated()" />
 		<security:form-login />
 		<security:logout />
 	</security:http>
@@ -50,7 +52,6 @@
 				<security:user name="admin" password="admin"
 					authorities="admin" />
 			</security:user-service>
-
 		</security:authentication-provider>
 		<security:authentication-provider
 			user-service-ref="userDetailsService">

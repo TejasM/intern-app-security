@@ -35,7 +35,7 @@ public class ProjectDaoImpl implements ProjectDao
 
    public Project getById(Long id)
    {
-      return entityManager.find(Project.class, id);
+	  return entityManager.find(Project.class, id);
    }
 
    public void update(Project entity)
@@ -47,6 +47,7 @@ public class ProjectDaoImpl implements ProjectDao
    public void create(Project entity)
    {
       entityManager.persist(entity);
+      entityManager.flush();
       return;
    }
 
