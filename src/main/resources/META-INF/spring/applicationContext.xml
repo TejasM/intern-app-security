@@ -9,8 +9,9 @@
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
-	
+
 	<context:component-scan base-package="org.jboss.examples.repo" />
+	<context:component-scan base-package="org.jboss.examples.**" />
 	<bean class="org.springframework.orm.jpa.support.SharedEntityManagerBean"
 		id="entityManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
@@ -20,8 +21,25 @@
 	<jee:jndi-lookup expected-type="javax.persistence.EntityManagerFactory"
 		id="entityManagerFactory" jndi-name="java:jboss/forge-default/persistence" />
 
+
+	<bean id="daoAuthenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="userDetailsService" />
+	</bean>
+
+	<bean id="authenticationManager"
+		class="org.springframework.security.authentication.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref local="daoAuthenticationProvider" />
+			</list>
+		</property>
+	</bean>
+
+
 	<security:http auto-config="true" use-expressions="true">
-		<security:intercept-url pattern="/**" access="permitAll"/>
+		<security:intercept-url pattern="/**"
+			access="hasAnyRole('admin') or isAuthenticated()"/>
 		<security:form-login />
 		<security:logout />
 	</security:http>
@@ -30,8 +48,12 @@
 		<security:authentication-provider>
 			<security:user-service>
 				<security:user name="admin" password="admin"
-					authorities="admin, user" />
+					authorities="admin" />
 			</security:user-service>
+
+		</security:authentication-provider>
+		<security:authentication-provider
+			user-service-ref="userDetailsService">
 		</security:authentication-provider>
 	</security:authentication-manager>
 

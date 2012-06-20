@@ -36,6 +36,10 @@
 			<div id="footer">
 				Powered by <a href="http://jboss.org/forge">Forge</a>.  Icons by the <a href="http://everaldo.com/crystal">Crystal Project</a>
 			</div>
+			
+			<div id="footer2">
+				<a href="<c:url value="/j_spring_security_logout" />" > Logout</a>
+			</div>
 		</div>
 
 	</body>
